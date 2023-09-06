@@ -34,12 +34,12 @@ public class TestController : ControllerBase
     {
 
         // Check from cache
-        var cachedData = _cacheService.GetData<IEnumerable<Role>>($"roles.{page}.{pageSize}");
+        // var cachedData = _cacheService.GetData<IEnumerable<Role>>($"roles.{page}.{pageSize}");
 
-        if(cachedData != null && cachedData.Any())
-        {
-            return Ok(cachedData);
-        }
+        //if (cachedData != null && cachedData.Any())
+        //{
+        //    return Ok(cachedData);
+        //}
 
         try
         {
@@ -47,7 +47,7 @@ public class TestController : ControllerBase
             using SqlConnection connection = new(_connString);
             connection.Open();
 
-            using SqlCommand command = new("spPagingTestsV2", connection);
+            using SqlCommand command = new("spPagingTestsV3", connection);
             command.CommandType = CommandType.StoredProcedure;
             command.Parameters.AddWithValue("page", page);
             command.Parameters.AddWithValue("pageSize", pageSize);
@@ -73,7 +73,7 @@ public class TestController : ControllerBase
             }
 
             // Set cache
-            _cacheService.SetData<IEnumerable<Role>>(($"roles.{page}.{pageSize}"), data, DateTimeOffset.Now.AddMinutes(15));
+            //_cacheService.SetData<IEnumerable<Role>>(($"roles.{page}.{pageSize}"), data, DateTimeOffset.Now.AddMinutes(15));
             // Return from DB
             return Ok(data);
         }
